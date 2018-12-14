@@ -46,7 +46,7 @@ FactoryBot.define do
     product_meta_tag
 
     trait :with_thumbnail do
-      thumbnail { Rails.root.join("../", "fixtures", "files", "image.svg").open }
+      thumbnail { file_fixture("image.png").open }
     end
   end
 
@@ -72,4 +72,8 @@ FactoryBot.define do
     sequence(:name) { |n| "Country #{n}" }
     sequence(:code) { |n| "C#{n}" }
   end
+end
+
+def file_fixture(path)
+  Rails.root.join("../", "fixtures", "files", path)
 end

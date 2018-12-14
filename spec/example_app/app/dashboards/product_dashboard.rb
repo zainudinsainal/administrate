@@ -19,6 +19,14 @@ class ProductDashboard < Administrate::BaseDashboard
     product_meta_tag: Field::HasOne,
   }
 
+  if defined? ActiveStorage
+    ATTRIBUTE_TYPES.merge!(
+      thumbnail: Field::Attachment,
+    )
+
+    ATTRIBUTES.push(:thumbnail)
+  end
+
   COLLECTION_ATTRIBUTES = ATTRIBUTES
   FORM_ATTRIBUTES = ATTRIBUTES
   SHOW_PAGE_ATTRIBUTES = ATTRIBUTES

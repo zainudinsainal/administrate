@@ -1,0 +1,11 @@
+<% if field.data.attached? %>
+  <%= link_to(url_for(field.data)) do %>
+    <% if field.variant? %>
+      <%= image_tag field.variant %>
+    <% elsif field.preview? %>
+      <%= image_tag field.preview %>
+    <% else %>
+      <%= image_tag field.data %>
+    <% end %>
+  <% end %>
+<% end %>
