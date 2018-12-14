@@ -27,4 +27,5 @@ appraise "rails52" do
   gem "actionpack", "~> 5.2.0"
   gem "actionview", "~> 5.2.0"
   gem "activerecord", "~> 5.2.0"
+  gem "activestorage", "~> 5.2.0"
 end

@@ -9,6 +9,10 @@ class Product < ActiveRecord::Base
   validates :slug, uniqueness: true
   validate :valid_slug
 
+  if defined? ActiveStorage
+    has_one_attached :thumbnail
+  end
+
   accepts_nested_attributes_for :product_meta_tag
 
   def name=(value)

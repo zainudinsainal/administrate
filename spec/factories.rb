@@ -44,6 +44,10 @@ FactoryBot.define do
       "https://cdn.recombu.com/mobile/images/news/M11370/1264769196_w670.jpg"
     end
     product_meta_tag
+
+    trait :with_thumbnail do
+      thumbnail { Rails.root.join("../", "fixtures", "files", "image.svg").open }
+    end
   end
 
   factory :product_meta_tag do
