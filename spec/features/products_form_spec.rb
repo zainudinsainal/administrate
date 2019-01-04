@@ -1,20 +1,18 @@
 require "rails_helper"
 
 describe "product form has_one relationship" do
-  if defined? ActiveStorage
-    context "supports file attachments" do
-      it "renders an image upload form input" do
-        product_attributes = attributes_for(:product, :with_thumbnail)
+  context "supports file attachments", :active_storage do
+    it "renders an image upload form input" do
+      product_attributes = attributes_for(:product, :with_thumbnail)
 
-        visit new_admin_product_path
-        fill_form(:product, product_attributes)
-        fill_in "Meta title", with: "Example meta title"
-        fill_in "Meta description", with: "Example meta description"
-        click_on submit(:product)
+      visit new_admin_product_path
+      fill_form(:product, product_attributes)
+      fill_in "Meta title", with: "Example meta title"
+      fill_in "Meta description", with: "Example meta description"
+      click_on submit(:product)
 
-        within ".main-content__body" do
-          expect(page).to have_css(%{img})
-        end
+      within ".main-content__body" do
+        expect(page).to have_css(%{img})
       end
     end
   end
