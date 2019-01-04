@@ -12,7 +12,7 @@ module Administrate
       end
 
       def preview
-        data.preview(*options.fetch(:preview, {}))
+        data.preview(options.fetch(:preview, {}))
       end
 
       def variant?
@@ -20,7 +20,7 @@ module Administrate
       end
 
       def variant
-        data.variant(*options.fetch(:variant, {}))
+        data.variant(options.fetch(:variant, {}))
       end
     end
   end
