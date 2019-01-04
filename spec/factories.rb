@@ -74,6 +74,6 @@ FactoryBot.define do
   end
 end
 
-def file_fixture(path)
-  Rails.root.join("../", "fixtures", "files", path)
+def file_fixture(*path)
+  Rails.root.join("../", "fixtures", "files", *path)
 end
