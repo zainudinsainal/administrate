@@ -9,9 +9,11 @@ Capybara.register_driver :headless_chrome do |app|
   options.headless!
   options.add_argument "--window-size=1680,1050"
 
-  Capybara::Selenium::Driver.new app,
+  Capybara::Selenium::Driver.new(
+    app,
     browser: :chrome,
-    options: options
+    options: options,
+  )
 end
 
 Capybara.server = :webrick
