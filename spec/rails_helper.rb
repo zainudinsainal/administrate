@@ -6,19 +6,18 @@ require File.expand_path("../../spec/example_app/config/environment", __FILE__)
 
 require "rspec/rails"
 require "shoulda/matchers"
-require "capybara/poltergeist"
 
 Dir[Rails.root.join("../../spec/support/**/*.rb")].each { |file| require file }
 
 require "factories"
 
-module Features
-  # Extend this module in spec/support/features/*.rb
+module SystemHelpers
+  # Extend this module in spec/support/system_helpers/*.rb
   include Formulaic::Dsl
 end
 
 RSpec.configure do |config|
-  config.include Features, type: :feature
+  config.include SystemHelpers, type: :system
   config.include DashboardHelpers
   config.include ControllerHelpers
   config.infer_base_class_for_anonymous_controllers = false
@@ -31,10 +30,3 @@ RSpec.configure do |config|
 end
 
 ActiveRecord::Migration.maintain_test_schema!
-Capybara.javascript_driver = :poltergeist
-Capybara.register_driver :poltergeist do |app|
-  options = { phantomjs_options: ["--load-images=no"] }
-  Capybara::Poltergeist::Driver.new(app, options)
-end
-
-Capybara.server = :webrick
