@@ -21,6 +21,9 @@ commands:
           paths:
             - vendor/bundle
 
+      # Install Chromedriver
+      - run: bin/rails webdrivers:chromedriver:update
+
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
 
