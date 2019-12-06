@@ -24,7 +24,6 @@ end
 
 group :test do
   gem "ammeter"
-  gem "capybara", "~> 2.13.0"
   gem "capybara-selenium"
   gem "database_cleaner", require: false
   gem "formulaic"
