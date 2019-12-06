@@ -126,7 +126,7 @@ RSpec.describe "customer index page", type: SYSTEM_TEST do
   end
 end
 
-describe "search input" do
+RSpec.describe "search input", type: SYSTEM_TEST do
   context "when resource has searchable fields" do
     let(:index_with_searchable_fields) { admin_log_entries_path }
 
