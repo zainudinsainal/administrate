@@ -21,9 +21,6 @@ commands:
           paths:
             - vendor/bundle
 
-      # Install Chromedriver
-      - run: bin/rails webdrivers:chromedriver:update
-
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
 
@@ -53,7 +50,7 @@ jobs:
           PGHOST: localhost
           PGUSER: administrate
           RAILS_ENV: test
-      - image: postgres:10.1-alpine
+      - image: postgres:10.1-alpine-ram
         environment:
           POSTGRES_USER: administrate
           POSTGRES_DB: ruby25
@@ -67,7 +64,7 @@ jobs:
           PGHOST: localhost
           PGUSER: administrate
           RAILS_ENV: test
-      - image: postgres:10.1-alpine
+      - image: postgres:10.1-alpine-ram
         environment:
           POSTGRES_USER: administrate
           POSTGRES_DB: ruby26
