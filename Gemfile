@@ -24,7 +24,7 @@ end
 
 group :test do
   gem "ammeter"
-  gem "capybara", "3.29.0"
+  gem "capybara", "~> 2.13.0"
   gem "capybara-selenium"
   gem "database_cleaner", require: false
   gem "formulaic"
@@ -35,7 +35,6 @@ group :test do
   gem "timecop"
   gem "webdrivers"
   gem "webmock"
-  gem "xpath", "3.2.0"
 end
 
 group :staging, :production do

@@ -25,6 +25,7 @@ appraise "rails51" do
   gem "actionview", "~> 5.1.0"
   gem "activerecord", "~> 5.1.0"
   gem "pg", "0.21.0"
+  gem "puma"
 
   group :development, :test do
     gem "rspec-rails"
@@ -35,6 +36,7 @@ appraise "rails52" do
   gem "actionpack", "~> 5.2.0"
   gem "actionview", "~> 5.2.0"
   gem "activerecord", "~> 5.2.0"
+  gem "puma"
 
   group :development, :test do
     gem "rspec-rails"
@@ -43,6 +45,7 @@ end
 
 appraise "rails60" do
   gem "rails", "~> 6.0.0.rc1"
+  gem "puma"
 
   group :development, :test do
     gem "rspec-rails", "~> 4.0.0.beta2"
