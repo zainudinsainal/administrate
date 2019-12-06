@@ -30,7 +30,7 @@ RSpec.configure do |config|
   config.include ControllerHelpers
   config.infer_base_class_for_anonymous_controllers = false
   config.infer_spec_type_from_file_location!
-  config.use_transactional_fixtures = SYSTEM_TEST == :system
+  config.use_transactional_fixtures = defined?(ActionDispatch::SystemTestCase)
 
   config.before(:each, type: :generator) do
     allow(Rails).to receive(:root).and_return(Pathname.new(file(".")))
