@@ -5,7 +5,7 @@ appraise "rails42" do
   gem "pg", "0.21.0"
 
   group :development, :test do
-    gem "rspec-rails"
+    gem "rspec-rails", "~> 3.6.0"
   end
 end
 
@@ -16,7 +16,7 @@ appraise "rails50" do
   gem "pg", "0.21.0"
 
   group :development, :test do
-    gem "rspec-rails"
+    gem "rspec-rails", "~> 3.6.0"
   end
 end
 
