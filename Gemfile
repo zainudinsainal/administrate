@@ -26,6 +26,7 @@ group :test do
   gem "ammeter"
   gem "capybara", "3.29.0"
   gem "capybara-selenium"
+  gem "database_cleaner", require: false
   gem "formulaic"
   gem "launchy"
   gem "pundit"

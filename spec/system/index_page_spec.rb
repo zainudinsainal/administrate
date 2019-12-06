@@ -2,7 +2,7 @@ require "rails_helper"
 
 search_input_selector = ".search__input"
 
-describe "customer index page" do
+RSpec.describe "customer index page", type: SYSTEM_TEST do
   it "displays customers' name and email" do
     customer = create(:customer)
 

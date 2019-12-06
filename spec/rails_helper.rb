@@ -9,6 +9,12 @@ require "shoulda/matchers"
 
 Dir[Rails.root.join("../../spec/support/**/*.rb")].each { |file| require file }
 
+SYSTEM_TEST = if defined?(ActionDispatch::SystemTestCase)
+  :system
+else
+  :feature
+end
+
 require "factories"
 
 module SystemHelpers
@@ -17,7 +23,7 @@ module SystemHelpers
 end
 
 RSpec.configure do |config|
-  config.include SystemHelpers, type: :system
+  config.include SystemHelpers, type: SYSTEM_TEST
   config.include DashboardHelpers
   config.include ControllerHelpers
   config.infer_base_class_for_anonymous_controllers = false
