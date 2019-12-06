@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "order form", type: SYSTEM_TEST do
+RSpec.describe "order form", type: :system do
   it "displays a select box for the customer" do
     customer = create(:customer)
 

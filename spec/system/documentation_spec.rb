@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "documentation navigation", type: SYSTEM_TEST do
+RSpec.describe "documentation navigation", type: :system do
   it "shows a 404 for missing pages" do
     visit "not_a_page"
 

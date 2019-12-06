@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "order index page", type: SYSTEM_TEST do
+RSpec.describe "order index page", type: :system do
   it "user views order attributes" do
     order = create(:order)
 

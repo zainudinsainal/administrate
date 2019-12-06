@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "payment index page", type: SYSTEM_TEST do
+RSpec.describe "payment index page", type: :system do
   it "user views payment attributes" do
     payment = create(:payment)
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "edit form", type: SYSTEM_TEST do
+RSpec.describe "edit form", type: :system do
   it "has the correct css class_name" do
     customer = create(:customer)
 

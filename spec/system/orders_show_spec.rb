@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "order show page", type: SYSTEM_TEST do
+RSpec.describe "order show page", type: :system do
   it "displays line item information" do
     line_item = create(:line_item)
 

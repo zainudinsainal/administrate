@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "payment show page", type: SYSTEM_TEST do
+RSpec.describe "payment show page", type: :system do
   it "user cannot click through to the edit page" do
     payment = create(:payment)
 

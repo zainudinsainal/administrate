@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "log entries index page", type: SYSTEM_TEST do
+RSpec.describe "log entries index page", type: :system do
   it "user views log entries" do
     log_entry = create(:log_entry, action: "test-action")
 

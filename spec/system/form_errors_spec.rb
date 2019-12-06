@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "form errors", type: SYSTEM_TEST do
+RSpec.describe "form errors", type: :system do
   it "error messages for new resource" do
     visit new_admin_customer_path
     fill_in("Name", with: "")

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "log entry show page", type: SYSTEM_TEST do
+RSpec.describe "log entry show page", type: :system do
   it "displays logeable information" do
     log_entry = create(:log_entry)
 

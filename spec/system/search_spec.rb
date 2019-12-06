@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Search", type: SYSTEM_TEST do
+RSpec.describe "Search", type: :system do
   it "admin searches for customer by email", :js do
     query = "bar@baz.com"
     perfect_match = create(:customer, email: "bar@baz.com")
