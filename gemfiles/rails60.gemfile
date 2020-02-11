@@ -14,7 +14,7 @@ gem "unicorn"
 gem "rails", "~> 6.0.0.rc1"
 
 group :development, :test do
-  gem "appraisal"
+  gem "appraisal", branch: "nc-install-path", git: "https://github.com/thoughtbot/appraisal.git"
   gem "awesome_print"
   gem "bundler-audit", require: false
   gem "byebug"

@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gemspec
 
@@ -13,7 +14,9 @@ gem "sentry-raven"
 gem "unicorn"
 
 group :development, :test do
-  gem "appraisal"
+  gem "appraisal",
+      github: "thoughtbot/appraisal",
+      branch: "nc-install-path"
   gem "awesome_print"
   gem "bundler-audit", require: false
   gem "byebug"
