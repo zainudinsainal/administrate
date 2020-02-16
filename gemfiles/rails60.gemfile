@@ -13,7 +13,7 @@ gem "unicorn"
 gem "rails", "~> 6.0.0.rc1"
 
 group :development, :test do
-  gem "appraisal"
+  gem "appraisal", branch: "fix_warnings", git: "https://github.com/deivid-rodriguez/appraisal.git"
   gem "awesome_print"
   gem "bundler-audit", require: false
   gem "byebug"

@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/deivid-rodriguez/appraisal.git
+  revision: c8821b425d85774d8cfc3551b68105f4e812df05
+  branch: fix_warnings
+  specs:
+    appraisal (2.2.0)
+      bundler
+      rake
+      thor (>= 0.14.0)
+
 PATH
   remote: .
   specs:
@@ -48,10 +58,6 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec-rails (>= 2.2)
-    appraisal (2.2.0)
-      bundler
-      rake
-      thor (>= 0.14.0)
     ast (2.4.0)
     autoprefixer-rails (9.7.4)
       execjs
@@ -254,7 +260,7 @@ DEPENDENCIES
   administrate!
   administrate-field-image
   ammeter
-  appraisal
+  appraisal!
   autoprefixer-rails
   awesome_print
   bundler-audit
