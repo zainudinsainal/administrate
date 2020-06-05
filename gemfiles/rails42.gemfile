@@ -16,7 +16,7 @@ gem "actionview", "~> 4.2.0"
 gem "activerecord", "~> 4.2.0"
 
 group :development, :test do
-  gem "appraisal", branch: "nc-install-path", git: "https://github.com/thoughtbot/appraisal.git"
+  gem "appraisal"
   gem "awesome_print"
   gem "bundler-audit", require: false
   gem "byebug"
