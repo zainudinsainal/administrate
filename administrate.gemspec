@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails", ">= 4.0"
   s.add_dependency "kaminari", ">= 1.0"
   s.add_dependency "dartsass-sprockets", "~> 3.1"
-  s.add_dependency "sassc-embedded", "1.77.6"
+  s.add_dependency "sassc-embedded", "1.77.8"
   s.add_dependency "selectize-rails", "~> 0.6"
 
   s.description = <<-DESCRIPTION
