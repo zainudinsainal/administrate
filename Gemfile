@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "3.3.1" unless ENV["CI"]
+ruby "3.3.6" unless ENV["CI"]
 
 gemspec
 
@@ -31,7 +31,7 @@ group :test do
   gem "database_cleaner"
   gem "formulaic"
   gem "launchy"
-  gem "selenium-webdriver", "= 4.9.0"
+  gem "selenium-webdriver", "= 4.35.0"
   gem "shoulda-matchers"
   gem "timecop"
   gem "webdrivers"
