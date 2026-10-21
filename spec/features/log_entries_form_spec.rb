@@ -11,8 +11,22 @@ describe "log entry form" do
 
     expect(page).to have_link(customer.name)
     expect(page).to have_flash(
-      t("administrate.controller.create.success", resource: "Log entry"),
+      t("administrate.controller.create.success", resource: "Log entry")
     )
+  end
+
+  it "allows to type in the select field to find a match and select it", :js do
+    _customer = create(:customer, name: "Brucey")
+    _customer2 = create(:customer, name: "Nacho")
+
+    visit new_admin_log_entry_path
+    fill_in "Action", with: "create"
+    find(".selectize-input").click
+    find(".selectize-input").fill_in(with: "Brucey")
+    find(".option", text: "Brucey").click
+    click_on "Create Log entry"
+
+    expect(page).to have_content("Brucey")
   end
 
   it "shows the selected logeable value" do

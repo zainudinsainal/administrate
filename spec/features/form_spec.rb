@@ -16,10 +16,10 @@ describe "edit form" do
       helpers: {
         label: {
           customer: {
-            email_subscriber: custom_label,
-          },
-        },
-      },
+            email_subscriber: custom_label
+          }
+        }
+      }
     }
 
     with_translations(:en, translations) do
@@ -36,7 +36,7 @@ describe "edit form" do
       Product.human_attribute_name(:name),
       Product.human_attribute_name(:description),
       Product.human_attribute_name(:price),
-      Product.human_attribute_name(:image_url),
+      Product.human_attribute_name(:image_url)
     ]
 
     required_field_labels = find_all(".field-unit--required").map(&:text)
@@ -103,6 +103,29 @@ describe "edit form" do
       element_selections = find("select[name=\"customer[kind]\"]")
 
       expect(element_selections.first("option").value).not_to eq("")
+    end
+  end
+
+  context "fields hints" do
+    it "displays a field hint element within the field unit" do
+      field_hint = "The typology of customer"
+
+      translations = {
+        administrate: {
+          field_hints: {
+            customer: {
+              kind: field_hint
+            }
+          }
+        }
+      }
+
+      with_translations(:en, translations) do
+        visit new_admin_customer_path
+
+        css_hint_element = ".field-unit > .field-unit__hint"
+        expect(page).to have_css(css_hint_element, text: field_hint)
+      end
     end
   end
 end

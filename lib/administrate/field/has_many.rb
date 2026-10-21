@@ -18,11 +18,15 @@ module Administrate
         # be `country_ids` instead.
         #
         # See https://github.com/rails/rails/blob/b30a23f53b52e59d31358f7b80385ee5c2ba3afe/activerecord/lib/active_record/associations/builder/collection_association.rb#L48
-        { "#{attr.to_s.singularize}_ids".to_sym => [] }
+        {"#{attr.to_s.singularize}_ids": []}
       end
 
       def associated_collection(order = self.order)
-        Administrate::Page::Collection.new(associated_dashboard, order: order)
+        Administrate::Page::Collection.new(
+          associated_dashboard,
+          order: order,
+          collection_attributes: options[:collection_attributes]
+        )
       end
 
       def attribute_key
@@ -33,7 +37,7 @@ module Administrate
         candidate_resources.map do |associated_resource|
           [
             display_candidate_resource(associated_resource),
-            associated_resource.send(association_primary_key),
+            associated_resource.send(association_primary_key)
           ]
         end
       end
@@ -55,7 +59,7 @@ module Administrate
       def permitted_attribute
         self.class.permitted_attribute(
           attribute,
-          resource_class: resource.class,
+          resource_class: resource.class
         )
       end
 
@@ -68,7 +72,7 @@ module Administrate
       end
 
       def more_than_limit?
-        paginate? && data.count(:all) > limit
+        paginate? && data.size > limit
       end
 
       def data
@@ -79,11 +83,20 @@ module Administrate
         Administrate::Order.new(
           params.fetch(:order, sort_by),
           params.fetch(:direction, direction),
+          sorting_column: sorting_column(
+            associated_dashboard_attribute(params.fetch(:order, sort_by))
+          )
         )
       end
 
       def order
-        @order ||= Administrate::Order.new(sort_by, direction)
+        @order ||= Administrate::Order.new(
+          sort_by,
+          direction,
+          sorting_column: sorting_column(
+            associated_dashboard_attribute(sort_by)
+          )
+        )
       end
 
       private
@@ -103,6 +116,16 @@ module Administrate
 
       def display_candidate_resource(resource)
         associated_dashboard.display_resource(resource)
+      end
+
+      def sorting_column(dashboard_attribute)
+        return unless dashboard_attribute.try(:options)
+
+        dashboard_attribute.options.fetch(:sorting_column, nil)
+      end
+
+      def associated_dashboard_attribute(attribute)
+        associated_dashboard.attribute_types[attribute.to_sym] if attribute
       end
 
       def sort_by

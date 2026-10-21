@@ -1,7 +1,5 @@
 require "rails_helper"
 
-search_input_selector = ".search__input"
-
 describe "customer index page" do
   it "displays customers' name and email" do
     customer = create(:customer)
@@ -45,14 +43,14 @@ describe "customer index page" do
     visit admin_customers_path
     click_on "Edit"
 
-    expect(current_path).to eq(edit_admin_customer_path(customer))
+    expect(page).to have_current_path(edit_admin_customer_path(customer))
   end
 
   it "links to the new page" do
     visit admin_customers_path
     click_on("New customer")
 
-    expect(current_path).to eq(new_admin_customer_path)
+    expect(page).to have_current_path(new_admin_customer_path)
   end
 
   it "displays translated labels" do
@@ -62,10 +60,10 @@ describe "customer index page" do
       helpers: {
         label: {
           customer: {
-            email_subscriber: custom_label,
-          },
-        },
-      },
+            email_subscriber: custom_label
+          }
+        }
+      }
     }
 
     with_translations(:en, translations) do
@@ -83,9 +81,17 @@ describe "customer index page" do
     visit admin_customers_path
 
     within(".main-content") { click_on "Orders" }
-    expect(page).to have_content(/Cam.*1 order.*Ade.*2 orders.*Ben.*3 orders/)
+    within :table do
+      expect(page).to have_css("tbody tr:nth-child(1)", text: "Cam").and(have_text("1 order"))
+      expect(page).to have_css("tbody tr:nth-child(2)", text: "Ade").and(have_text("2 orders"))
+      expect(page).to have_css("tbody tr:nth-child(3)", text: "Ben").and(have_text("3 orders"))
+    end
 
     within(".main-content") { click_on "Orders" }
-    expect(page).to have_content(/Ben.*3 orders.*Ade.*2 orders.*Cam.*1 order/)
+    within :table do
+      expect(page).to have_css("tbody tr:nth-child(1)", text: "Ben").and(have_text("3 orders"))
+      expect(page).to have_css("tbody tr:nth-child(2)", text: "Ade").and(have_text("2 orders"))
+      expect(page).to have_css("tbody tr:nth-child(3)", text: "Cam").and(have_text("1 order"))
+    end
   end
 end

@@ -17,9 +17,9 @@ RSpec.describe "product index page" do
     visit admin_products_path
     click_row_for(product)
 
-    expect(current_path).to eq(admin_product_path(product))
     expect(page).to have_content(product.name)
     expect(page).to have_content(product.description)
+    expect(page).to have_current_path(admin_product_path(product))
   end
 
   it "links to the edit page" do
@@ -28,37 +28,50 @@ RSpec.describe "product index page" do
     visit admin_products_path
     click_on "Edit"
 
-    expect(current_path).to eq(edit_admin_product_path(product))
+    expect(page).to have_current_path(edit_admin_product_path(product))
   end
 
   it "links to the new page" do
     visit admin_products_path
     click_on("New product")
 
-    expect(current_path).to eq(new_admin_product_path)
+    expect(page).to have_current_path(new_admin_product_path)
   end
 
   scenario "product sorted by has_one association" do
     create(
       :product,
-      product_meta_tag: build(:product_meta_tag, meta_title: "Gamma"),
+      product_meta_tag: build(:product_meta_tag, meta_title: "Gamma")
     )
     create(
       :product,
-      product_meta_tag: build(:product_meta_tag, meta_title: "Alpha"),
+      product_meta_tag: build(:product_meta_tag, meta_title: "Alpha")
     )
     create(
       :product,
-      product_meta_tag: build(:product_meta_tag, meta_title: "Beta"),
+      product_meta_tag: build(:product_meta_tag, meta_title: "Beta")
     )
 
     visit admin_products_path
-    expect(page).to have_content(/Gamma.*Alpha.*Beta/)
+
+    within :table do
+      expect(page).to have_css("tbody tr:nth-child(1)", text: "Gamma")
+      expect(page).to have_css("tbody tr:nth-child(2)", text: "Alpha")
+      expect(page).to have_css("tbody tr:nth-child(3)", text: "Beta")
+    end
 
     click_on "Product Meta Tag"
-    expect(page).to have_content(/Alpha.*Beta.*Gamma/)
+    within :table do
+      expect(page).to have_css("tbody tr:nth-child(1)", text: "Alpha")
+      expect(page).to have_css("tbody tr:nth-child(2)", text: "Beta")
+      expect(page).to have_css("tbody tr:nth-child(3)", text: "Gamma")
+    end
 
     click_on "Product Meta Tag"
-    expect(page).to have_content(/Gamma.*Beta.*Alpha/)
+    within :table do
+      expect(page).to have_css("tbody tr:nth-child(1)", text: "Gamma")
+      expect(page).to have_css("tbody tr:nth-child(2)", text: "Beta")
+      expect(page).to have_css("tbody tr:nth-child(3)", text: "Alpha")
+    end
   end
 end

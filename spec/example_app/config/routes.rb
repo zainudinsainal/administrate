@@ -20,10 +20,13 @@ Rails.application.routes.draw do
     end
 
     resources :stats, only: [:index]
+    resources :hosts, only: [:index]
 
     root to: "customers#index"
   end
 
-  get "/*page", to: "docs#show"
+  get "/files/receipts/*filename.txt", to: "files#download"
+
+  get "/*page", to: "docs#show", constraints: ->(request) { !request.path.start_with?("/rails/") }
   root to: "docs#index"
 end

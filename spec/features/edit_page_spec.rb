@@ -41,7 +41,7 @@ describe "customer edit page" do
 
     visit edit_admin_customer_path(customer)
 
-    find(".selectize-input #customer_kind-selectized").click
+    find(:xpath, "//div[contains(@class, 'selectize-input') and .//input[@id='customer_kind-selectized']]").click
     find(:xpath, "//div[@data-selectable and contains(., 'vip')]").click
 
     click_on "Update Customer"
@@ -52,7 +52,7 @@ describe "customer edit page" do
     visit edit_admin_customer_path(customer)
     expect(page).to have_css(
       ".selectize-input.items > [data-value]",
-      text: "vip",
+      text: "vip"
     )
   end
 
@@ -65,7 +65,7 @@ describe "customer edit page" do
 
     expect(page).to have_css(
       "#error_explanation ul li.flash-error",
-      text: "Name can't be blank",
+      text: "Name can't be blank"
     )
   end
 
@@ -77,9 +77,9 @@ describe "customer edit page" do
     translations = {
       activerecord: {
         models: {
-          customer: "Custom name",
-        },
-      },
+          customer: "Custom name"
+        }
+      }
     }
 
     with_translations(:en, translations) do
@@ -103,5 +103,19 @@ describe "customer edit page" do
 
     customer.reload
     expect(customer.territory).to eq(country)
+  end
+
+  it "allows selecting a resource and submitting the form", :js do
+    _blog_post = create(:blog_post, title: "How to Bake Bread")
+    _blog_post2 = create(:blog_post, title: "How to Play Guitar")
+    tag = create(:blog_tag)
+
+    visit edit_admin_blog_tag_path(tag)
+    find(".selectize-input").click
+    find(".selectize-input").fill_in(with: "Bake Bread")
+    find(".option", text: "How to Bake Bread").click
+    click_button "Update Tag"
+
+    expect(page).to have_content("How to Bake Bread")
   end
 end

@@ -16,12 +16,60 @@ feature "Search" do
     it "is hidden when nothing is searchable in the current dashboard" do
       CustomerDashboard::ATTRIBUTE_TYPES.each do |_name, field_class|
         allow(field_class).to(
-          receive(:searchable?).and_return(false),
+          receive(:searchable?).and_return(false)
         )
       end
 
       visit admin_customers_path
       expect(page).not_to have_a_search_bar
+    end
+  end
+
+  describe "search bar tooltip" do
+    def have_a_search_tooltip
+      have_css("button[popovertarget=search-tooltip]")
+    end
+
+    def search_tooltip_icon
+      find("button[popovertarget=search-tooltip]")
+    end
+
+    it "is visible when the current dashboard has collection filters" do
+      visit admin_customers_path
+
+      expect(page).to have_a_search_tooltip
+    end
+
+    context "when clicked" do
+      it "shows a popover with the available filters" do
+        visit admin_customers_path
+
+        search_tooltip_icon.click
+
+        expect(page).to have_content("Use filters to refine your search")
+        expect(page).to have_content("vip:<value>")
+        expect(page).to have_content("kind:<value>")
+      end
+    end
+
+    it "is hidden when the current dashboard has no collection filters" do
+      stub_const("CustomerDashboard::COLLECTION_FILTERS", {})
+
+      visit admin_customers_path
+
+      expect(page).not_to have_a_search_tooltip
+    end
+
+    it "is hidden when nothing is searchable in the current dashboard" do
+      CustomerDashboard::ATTRIBUTE_TYPES.each do |_name, field_class|
+        allow(field_class).to(
+          receive(:searchable?).and_return(false)
+        )
+      end
+
+      visit admin_customers_path
+
+      expect(page).not_to have_a_search_tooltip
     end
   end
 
@@ -86,24 +134,17 @@ feature "Search" do
   end
 
   scenario "admin searches with a filter with arguments", :js do
-    kind_match = create(:customer, kind: "vip", email: "vip@kind.com")
-    standard_match = create(:customer, kind: "standard", email: "me@kind.com")
-    no_match = create(:customer, kind: "vip", email: "standard@kind.com")
+    kind_match = create(:customer, kind: "vip", email: "standard@kind.com")
+    total_mismatch = create(:customer, kind: "standard", email: "me@kind.com")
+    kind_mismatch = create(:customer, kind: "standard", email: "vip@kind.com")
 
     visit admin_customers_path
-    fill_in :search, with: "kind:standard"
-    submit_search
-
-    expect(page).to have_content(standard_match.email)
-    expect(page).not_to have_content(kind_match.email)
-    expect(page).not_to have_content(no_match.email)
-
-    clear_search
     fill_in :search, with: "kind:vip"
     submit_search
 
-    expect(page).not_to have_content(standard_match.email)
     expect(page).to have_content(kind_match.email)
+    expect(page).not_to have_content(total_mismatch.email)
+    expect(page).not_to have_content(kind_mismatch.email)
   end
 
   scenario "admin searches with an a term similiar to a filter", :js do
@@ -122,7 +163,7 @@ feature "Search" do
   scenario "admin clears search" do
     query = "foo"
     mismatch = create(:customer, name: "someone")
-    visit admin_customers_path(search: query, customer: { order: :name })
+    visit admin_customers_path(search: query, customer: {order: :name})
 
     expect(page).not_to have_content(mismatch.email)
     clear_search
@@ -154,7 +195,7 @@ feature "Search" do
   end
 
   def submit_search
-    page.execute_script("$('.search').submit()")
+    page.find_field("Search").send_keys(:enter)
   end
 
   def order_row_match(order)

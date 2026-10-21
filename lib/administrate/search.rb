@@ -59,8 +59,15 @@ module Administrate
         @scoped_resource.all
       else
         results = search_results(@scoped_resource)
-        results = filter_results(results)
-        results
+        filter_results(results)
+      end
+    end
+
+    def valid_filters
+      if @dashboard.class.const_defined?(:COLLECTION_FILTERS)
+        @dashboard.class.const_get(:COLLECTION_FILTERS).stringify_keys
+      else
+        {}
       end
     end
 
@@ -112,17 +119,9 @@ module Administrate
     end
 
     def search_results(resources)
-      resources.
-        left_joins(tables_to_join).
-        where(query_template, *query_values)
-    end
-
-    def valid_filters
-      if @dashboard.class.const_defined?(:COLLECTION_FILTERS)
-        @dashboard.class.const_get(:COLLECTION_FILTERS).stringify_keys
-      else
-        {}
-      end
+      resources
+        .left_joins(tables_to_join)
+        .where(query_template, *query_values)
     end
 
     def attribute_types
@@ -134,15 +133,14 @@ module Administrate
         provided_class_name = attribute_types[attr].options[:class_name]
         unquoted_table_name =
           if provided_class_name
-            Administrate.warn_of_deprecated_option(:class_name)
             provided_class_name.constantize.table_name
           else
             @scoped_resource.reflect_on_association(attr).klass.table_name
           end
         ActiveRecord::Base.connection.quote_table_name(unquoted_table_name)
       else
-        ActiveRecord::Base.connection.
-          quote_table_name(@scoped_resource.table_name)
+        ActiveRecord::Base.connection
+          .quote_table_name(@scoped_resource.table_name)
       end
     end
 

@@ -14,7 +14,7 @@ describe Administrate::Field::HasOne do
         :product_meta_tag,
         value,
         :show,
-        resource: resource,
+        resource: resource
       )
 
       form = field.nested_form
@@ -31,7 +31,7 @@ describe Administrate::Field::HasOne do
         :product_meta_tag,
         product_meta_tag,
         :show,
-        resource: product,
+        resource: product
       )
 
       show = field.nested_show
@@ -42,42 +42,24 @@ describe Administrate::Field::HasOne do
 
   describe ".permitted_attribute" do
     context "with custom class_name" do
-      before do
-        allow(ActiveSupport::Deprecation).to receive(:warn)
-      end
-
       it "returns attributes from correct dashboard" do
         field = Administrate::Field::Deferred.new(
           Administrate::Field::HasOne,
-          class_name: :product_meta_tag,
+          class_name: :product_meta_tag
         )
 
         field_name = "product_meta_tag"
         attributes = field.permitted_attribute(
           field_name,
-          resource_class: Product,
+          resource_class: Product
         )
-        expect(attributes[:"#{field_name}_attributes"]).
-          to eq(%i(meta_title meta_description id))
-      end
-
-      it "triggers a deprecation warning" do
-        field = Administrate::Field::Deferred.new(
-          Administrate::Field::HasOne,
-          class_name: :product_meta_tag,
-        )
-        field_name = "product_meta_tag"
-        field.permitted_attribute(
-          field_name,
-          resource_class: Product,
-        )
-        expect(ActiveSupport::Deprecation).to have_received(:warn).
-          with(/:class_name is deprecated/)
+        expect(attributes[:"#{field_name}_attributes"])
+          .to eq(%i[meta_title meta_description id])
       end
     end
   end
 
-  describe "#to_partial_path" do
+  describe "#partial_prefixes" do
     it "returns a partial based on the page being rendered" do
       resource = double
       page = :show
@@ -86,12 +68,12 @@ describe Administrate::Field::HasOne do
         :product_meta_tag,
         value,
         page,
-        resource: resource,
+        resource: resource
       )
 
-      path = field.to_partial_path
+      prefixes = field.partial_prefixes
 
-      expect(path).to eq("/fields/has_one/#{page}")
+      expect(prefixes).to eq(["fields/has_one", "fields/associative", "fields/base"])
     end
   end
 
@@ -102,7 +84,7 @@ describe Administrate::Field::HasOne do
         field = described_class.new(
           :product_meta_tag,
           product_meta_tag,
-          :show,
+          :show
         )
 
         expect(field).to be_linkable
@@ -115,7 +97,7 @@ describe Administrate::Field::HasOne do
         field = described_class.new(
           :product_meta_tag,
           product_meta_tag,
-          :show,
+          :show
         )
 
         expect(field).to_not be_linkable
@@ -128,7 +110,7 @@ describe Administrate::Field::HasOne do
         field = described_class.new(
           :product_meta_tag,
           product_meta_tag,
-          :show,
+          :show
         )
 
         expect(field).not_to be_linkable

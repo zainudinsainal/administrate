@@ -5,12 +5,7 @@ module Administrate
     class BelongsTo < Associative
       def self.permitted_attribute(attr, options = {})
         resource_class = options[:resource_class]
-        if resource_class
-          foreign_key_for(resource_class, attr)
-        else
-          Administrate.warn_of_missing_resource_class
-          :"#{attr}_id"
-        end
+        foreign_key_for(resource_class, attr)
       end
 
       def self.eager_load?
@@ -25,7 +20,7 @@ module Administrate
         candidate_resources.map do |resource|
           [
             display_candidate_resource(resource),
-            resource.send(association_primary_key),
+            resource.send(association_primary_key)
           ]
         end
       end
@@ -41,7 +36,12 @@ module Administrate
       private
 
       def candidate_resources
-        scope = options[:scope] ? options[:scope].call : associated_class.all
+        scope =
+          if options[:scope]
+            options[:scope].arity.positive? ? options[:scope].call(self) : options[:scope].call
+          else
+            associated_class.all
+          end
 
         order = options.delete(:order)
         order ? scope.reorder(order) : scope

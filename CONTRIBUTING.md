@@ -38,10 +38,11 @@ coverage and (where necessary) have internationalisation support.
 Administrate's demo application can be run like any Rails application:
 
 ```sh
-bundle exec rails s
+bin/dev
 ```
 
 This will start the application defined in `spec/example_app`.
+You can view the `example_app` in the browser by navigating to `/admin`.
 
 ## Repository Structure
 
@@ -69,7 +70,7 @@ This project uses:
 * Sass
 * [BEM]-style CSS selectors, with [namespaces]
 * Autoprefixer
-* SCSS-Lint, with [Hound] ([configuration](.scss-lint.yml))
+* SCSS-Lint, with [stylelint] ([configuration](stylelint-config))
 * A variety of CSS units:
   - `em` for typographical-related elements
   - `rem` for lengths related to components
@@ -78,7 +79,14 @@ This project uses:
 
 [BEM]: http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
 [namespaces]: http://csswizardry.com/2015/03/more-transparent-ui-code-with-namespaces/
-[Hound]: https://houndci.com/
+[stylelint]: https://stylelint.io
+[stylelint-config]: https://github.com/thoughtbot/stylelint-config
+
+## Icons
+
+We use [Feather][] for icons.
+
+[Feather]: https://feathericons.com
 
 ## Labels
 

@@ -10,7 +10,7 @@ In general, you can override any of the views under Administrate's
 [/app/views][1].
 For example, say that you want to customize the template used for flash
 messages. You can provide your own as
-`/app/views/administrate/application/_flashes.html.erb`, and it will replace
+`app/views/admin/application/_flashes.html.erb`, and it will replace
 Administrate's own.
 
 Figuring out which views are available and where can be repetitive. You can
@@ -93,4 +93,51 @@ rails generate administrate:views:layout
  rails generate administrate:views:navigation
  # It only generates the sidebar partial
  # -> app/views/admin/application/_navigation.html.erb
+```
+
+## Customizing for a specific layout
+
+You can use several hook points to add elements to specific layouts or specific pages:
+
+* header_middle
+* header_last
+* before_main
+* main
+* after_main
+
+For example, you can add a button in the middle of the header as follows:
+
+```eruby
+<%# app/views/admin/customers/_index_header.html.erb %>
+
+<% content_for(:header_middle) do %>
+  <div>
+    You are logged in as <em><%= pundit_user.name %></em>.
+    <%= link_to("Become the Admin", become_admin_customer_path("admin")) unless pundit_user.admin? %>
+  </div>
+<% end %>
+
+<%= render template: 'administrate/application/_index_header', locals: local_assigns %>
+```
+
+## Adding custom CSS and JS
+
+You can add custom CSS and JS to Administrate. Put the files in the
+appropriate folders (typically under `assets`) and point Administrate to them
+using the following API, preferably in an initializer. For example, if your
+files are called `admin.css` and `admin.js`:
+
+```
+/// config/initializers/administrate.rb
+Administrate::Engine.add_stylesheet("admin")
+Administrate::Engine.add_javascript("admin")
+```
+
+Then make sure to list them in your manifest file (Rails will helpfully remind
+you of this step if you miss it):
+
+```
+/// app/assets/config/manifest.js
+//= link admin.css
+//= link admin.js
 ```

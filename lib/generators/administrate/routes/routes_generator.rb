@@ -13,12 +13,13 @@ module Administrate
   module Generators
     class RoutesGenerator < Rails::Generators::Base
       include Administrate::GeneratorHelpers
+
       source_root File.expand_path("../templates", __FILE__)
       class_option(
         :namespace,
         type: :string,
         desc: "Namespace where the admin dashboards live",
-        default: "admin",
+        default: "admin"
       )
 
       def insert_dashboard_routes
@@ -61,10 +62,10 @@ module Administrate
       end
 
       def database_models
-        ActiveRecord::Base.descendants.
-          reject(&:abstract_class?).
-          reject { |k| k < Administrate::Generators::TestRecord }.
-          sort_by(&:to_s)
+        ActiveRecord::Base.descendants
+          .reject(&:abstract_class?)
+          .reject { |k| k < Administrate::Generators::TestRecord }
+          .sort_by(&:to_s)
       end
 
       def invalid_dashboard_models

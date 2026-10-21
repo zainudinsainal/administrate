@@ -10,19 +10,31 @@ describe Administrate::Field::BelongsTo do
     should_permit_param(
       "country_code",
       on_model: Customer,
-      for_attribute: :territory,
+      for_attribute: :territory
     )
   end
 
-  describe "#to_partial_path" do
+  describe "#html_controller" do
+    it "returns select" do
+      page = :show
+      owner = double
+      field = Administrate::Field::BelongsTo.new(:owner, owner, page)
+
+      html_controller = field.html_controller
+
+      expect(html_controller).to eq("select")
+    end
+  end
+
+  describe "#partial_prefixes" do
     it "returns a partial based on the page being rendered" do
       page = :show
       owner = double
       field = Administrate::Field::BelongsTo.new(:owner, owner, page)
 
-      path = field.to_partial_path
+      prefixes = field.partial_prefixes
 
-      expect(path).to eq("/fields/belongs_to/#{page}")
+      expect(prefixes).to eq(["fields/belongs_to", "fields/associative", "fields/base"])
     end
   end
 
@@ -33,7 +45,7 @@ describe Administrate::Field::BelongsTo do
         :product,
         nil,
         :show,
-        resource: line_item,
+        resource: line_item
       )
       expect(field.associated_class).to eq(Product)
     end
@@ -44,7 +56,7 @@ describe Administrate::Field::BelongsTo do
         :territory,
         nil,
         :show,
-        resource: customer,
+        resource: customer
       )
       expect(field.associated_class).to eq(Country)
     end
@@ -58,12 +70,12 @@ describe Administrate::Field::BelongsTo do
         :product,
         line_item.product,
         :show,
-        resource: line_item,
+        resource: line_item
       )
       allow_any_instance_of(ProductDashboard).to(
         receive(:display_resource) do |_, resource|
           "Mock #{resource.name}"
-        end,
+        end
       )
       expect(field.display_associated_resource).to eq("Mock Associated Product")
     end
@@ -75,32 +87,28 @@ describe Administrate::Field::BelongsTo do
         :territory,
         country,
         :show,
-        resource: customer,
+        resource: customer
       )
       allow_any_instance_of(CountryDashboard).to(
         receive(:display_resource) do |_, resource|
           "Mock #{resource.name}"
-        end,
+        end
       )
       expect(field.display_associated_resource).to eq("Mock Associated Country")
     end
   end
 
   describe "class_name option" do
-    before do
-      allow(ActiveSupport::Deprecation).to receive(:warn)
-    end
-
     it "determines the associated_class" do
       line_item = create(:line_item)
       field_class = Administrate::Field::BelongsTo.with_options(
-        class_name: "Customer",
+        class_name: "Customer"
       )
       field = field_class.new(
         :product,
         line_item.product,
         :show,
-        resource: line_item,
+        resource: line_item
       )
       expect(field.associated_class).to eq(Customer)
     end
@@ -109,33 +117,17 @@ describe Administrate::Field::BelongsTo do
       product = create(:product, name: "Associated Product")
       line_item = create(:line_item, product: product)
       field_class = Administrate::Field::BelongsTo.with_options(
-        class_name: "LineItem",
+        class_name: "LineItem"
       )
       field = field_class.new(
         :product,
         line_item.product,
         :show,
-        resource: line_item,
+        resource: line_item
       )
       expect(field.display_associated_resource).to match(
-        /^Line Item \#\d\d\d\d$/,
+        /^Line Item \#\d\d\d\d$/
       )
-    end
-
-    it "triggers a deprecation warning" do
-      line_item = create(:line_item)
-      field_class = Administrate::Field::BelongsTo.with_options(
-        class_name: "Customer",
-      )
-      field = field_class.new(
-        :product,
-        line_item.product,
-        :show,
-        resource: line_item,
-      )
-      field.associated_class
-      expect(ActiveSupport::Deprecation).to have_received(:warn).
-        with(/:class_name is deprecated/)
     end
   end
 
@@ -148,11 +140,11 @@ describe Administrate::Field::BelongsTo do
           :territory,
           [],
           :edit,
-          resource: customer,
+          resource: customer
         )
         candidates = field.associated_resource_options
 
-        expect(field.include_blank_option). to eq(true)
+        expect(field.include_blank_option).to eq(true)
         expect(candidates).to eq([])
       end
     end
@@ -161,91 +153,19 @@ describe Administrate::Field::BelongsTo do
       it "determines if choices has blank option or not" do
         customer = create(:customer, territory: nil)
         association = Administrate::Field::BelongsTo.with_options(
-          include_blank: false,
+          include_blank: false
         )
         field = association.new(
           :territory,
           [],
           :edit,
-          resource: customer,
+          resource: customer
         )
         candidates = field.associated_resource_options
 
-        expect(field.include_blank_option). to eq(false)
+        expect(field.include_blank_option).to eq(false)
         expect(candidates).to eq([])
       end
-    end
-  end
-
-  describe "primary_key option" do
-    before do
-      allow(ActiveSupport::Deprecation).to receive(:warn)
-
-      Foo = Class.new
-      FooDashboard = Class.new
-      uuid = SecureRandom.uuid
-      allow(Foo).to receive(:all).and_return([Foo])
-      allow(Foo).to receive(:uuid).and_return(uuid)
-      allow(Foo).to receive(:id).and_return(1)
-      allow_any_instance_of(FooDashboard).to(
-        receive(:display_resource).and_return(uuid),
-      )
-    end
-
-    after do
-      remove_constants :Foo, :FooDashboard
-    end
-
-    it "is the associated table key that matches our foreign key" do
-      association =
-        Administrate::Field::BelongsTo.with_options(
-          primary_key: "uuid", class_name: "Foo",
-        )
-      field = association.new(:customers, [], :show)
-      field.associated_resource_options
-
-      expect(Foo).to have_received(:all)
-      expect(Foo).to have_received(:uuid)
-      expect(Foo).not_to have_received(:id)
-    end
-
-    it "triggers a deprecation warning" do
-      association =
-        Administrate::Field::BelongsTo.with_options(
-          primary_key: "uuid",
-        )
-      field = association.new(:foo, double(uuid: nil), :baz)
-      field.selected_option
-
-      expect(ActiveSupport::Deprecation).to have_received(:warn).
-        with(/:primary_key is deprecated/)
-    end
-  end
-
-  describe "foreign_key option" do
-    before do
-      allow(ActiveSupport::Deprecation).to receive(:warn)
-    end
-
-    it "determines what foreign key is used on the relationship for the form" do
-      association = Administrate::Field::BelongsTo.with_options(
-        foreign_key: "foo_uuid", class_name: "Foo",
-      )
-      field = association.new(:customers, [], :show)
-      permitted_attribute = field.permitted_attribute
-      expect(permitted_attribute).to eq("foo_uuid")
-    end
-
-    it "triggers a deprecation warning" do
-      association = Administrate::Field::BelongsTo.with_options(
-        foreign_key: "foo_uuid", class_name: "Foo",
-      )
-      field = association.new(:customers, [], :show)
-
-      field.permitted_attribute
-
-      expect(ActiveSupport::Deprecation).to have_received(:warn).
-        with(/:foreign_key is deprecated/)
     end
   end
 
@@ -254,7 +174,7 @@ describe Administrate::Field::BelongsTo do
       it "returns the resources in correct order" do
         order = create(:order)
         create_list(:customer, 5)
-        options = { order: "name" }
+        options = {order: "name"}
         association = Administrate::Field::BelongsTo.with_options(options)
 
         field = association.new(:customer, [], :show, resource: order)
@@ -270,7 +190,7 @@ describe Administrate::Field::BelongsTo do
         create_list(:customer, 3)
         options = {
           order: "name",
-          scope: -> { Customer.order(name: :desc) },
+          scope: -> { Customer.order(name: :desc) }
         }
         association = Administrate::Field::BelongsTo.with_options(options)
 
@@ -297,6 +217,23 @@ describe Administrate::Field::BelongsTo do
         resources = field.associated_resource_options.compact.to_h.keys
 
         expect(resources).to eq ["customer-3", "customer-2"]
+      end
+
+      context "when scope with argument" do
+        it "returns the resources within the passed scope" do
+          # Building instead of creating, to avoid a dependent customer being
+          # created, leading to random failures
+          order = build(:order)
+
+          1.upto(3) { |i| create :customer, name: "customer-#{i}" }
+          scope = ->(_field) { Customer.order(name: :desc).limit(2) }
+
+          association = Administrate::Field::BelongsTo.with_options(scope: scope)
+          field = association.new(:customer, [], :show, resource: order)
+          resources = field.associated_resource_options.compact.to_h.keys
+
+          expect(resources).to eq ["customer-3", "customer-2"]
+        end
       end
     end
   end

@@ -9,7 +9,15 @@ module Administrate
 
     def render_field(field, locals = {})
       locals[:field] = field
-      render locals: locals, partial: field.to_partial_path
+      if (prefix = find_partial_prefix(field))
+        render locals: locals, partial: "#{prefix}/#{field.page}"
+      end
+    end
+
+    def find_partial_prefix(field)
+      field.partial_prefixes.detect do |prefix|
+        lookup_context.template_exists?(field.page, [prefix], true)
+      end
     end
 
     def requireness(field)
@@ -50,7 +58,7 @@ module Administrate
     def display_resource_name(resource_name, opts = {})
       dashboard_from_resource(resource_name).resource_name(
         count: opts[:singular] ? SINGULAR_COUNT : PLURAL_MANY_COUNT,
-        default: default_resource_name(resource_name, opts),
+        default: default_resource_name(resource_name, opts)
       )
     end
 
@@ -65,14 +73,14 @@ module Administrate
     def resource_index_route(resource_name)
       url_for(
         action: "index",
-        controller: "/#{namespace}/#{resource_name}",
+        controller: "/#{namespace}/#{resource_name}"
       )
     end
 
     def sanitized_order_params(page, current_field_name)
       collection_names = page.item_associations + [current_field_name]
       association_params = collection_names.map do |assoc_name|
-        { assoc_name => %i[order direction page per_page] }
+        {assoc_name => %i[order direction page per_page]}
       end
       params.permit(:search, :id, :_page, :per_page, association_params)
     end
@@ -87,7 +95,7 @@ module Administrate
 
     def default_resource_name(name, opts = {})
       resource_name = (opts[:singular] ? name.to_s : name.to_s.pluralize)
-      resource_name.gsub("/", "_").titleize
+      resource_name.tr("/", "_").titleize
     end
   end
 end

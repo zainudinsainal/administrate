@@ -12,13 +12,14 @@ module Administrate
   module Generators
     class InstallGenerator < Rails::Generators::Base
       include Administrate::GeneratorHelpers
+
       source_root File.expand_path("../templates", __FILE__)
 
       class_option(
         :namespace,
         type: :string,
         desc: "Namespace where the admin dashboards will live",
-        default: "admin",
+        default: "admin"
       )
 
       def run_routes_generator
@@ -31,7 +32,7 @@ module Administrate
       def create_dashboard_controller
         template(
           "application_controller.rb.erb",
-          "app/controllers/#{namespace}/application_controller.rb",
+          "app/controllers/#{namespace}/application_controller.rb"
         )
       end
 

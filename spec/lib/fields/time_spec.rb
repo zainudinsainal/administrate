@@ -2,15 +2,15 @@ require "rails_helper"
 require "administrate/field/time"
 
 describe Administrate::Field::Time do
-  describe "#to_partial_path" do
+  describe "#partial_prefixes" do
     it "returns a partial based on the page being rendered" do
       page = :show
       time = Time.zone.local(2000, 1, 1, 15, 45, 33)
       field = Administrate::Field::Time.new(:time, time, page)
 
-      path = field.to_partial_path
+      prefixes = field.partial_prefixes
 
-      expect(path).to eq("/fields/time/#{page}")
+      expect(prefixes).to eq(["fields/time", "fields/base"])
     end
   end
 
@@ -19,8 +19,8 @@ describe Administrate::Field::Time do
       time = DateTime.new(2021, 3, 26, 16, 38)
       formats = {
         time: {
-          formats: { short: "%H:%M" },
-        },
+          formats: {short: "%H:%M"}
+        }
       }
 
       options_field = Administrate::Field::Time.with_options(format: :short)
@@ -36,6 +36,36 @@ describe Administrate::Field::Time do
       field = Administrate::Field::Time.new(:time, time, :index)
 
       expect(field.time).to eq("04:38PM")
+    end
+  end
+
+  it "formats the time with localized AM/PM markers" do
+    time = DateTime.new(2021, 3, 26, 16, 38)
+    formats = {
+      time: {
+        am: "午前",
+        pm: "午後"
+      }
+    }
+
+    field = Administrate::Field::Time.new(:time, time, :index)
+
+    I18n.with_locale(:ja) do
+      with_translations(:ja, formats) do
+        expect(field.time).to eq("04:38午後")
+      end
+    end
+  end
+
+  it "returns a missing translation message if the translation is not available" do
+    time = DateTime.new(2021, 3, 26, 16, 38)
+    field = Administrate::Field::Time.new(:time, time, :index)
+    formats = {}
+
+    I18n.with_locale(:ja) do
+      with_translations(:ja, formats) do
+        expect(field.time).to eq("Translation missing: ja.time.pm")
+      end
     end
   end
 end

@@ -5,14 +5,14 @@ require "support/field_matchers"
 describe Administrate::Field::Password do
   include FieldMatchers
 
-  describe "#to_partial_path" do
+  describe "#partial_prefixes" do
     it "returns a partial based on the page being rendered" do
       page = :show
       field = Administrate::Field::Password.new(:password, "my_password", page)
 
-      path = field.to_partial_path
+      prefixes = field.partial_prefixes
 
-      expect(path).to eq("/fields/password/#{page}")
+      expect(prefixes).to eq(["fields/password", "fields/base"])
     end
   end
 
@@ -20,7 +20,7 @@ describe Administrate::Field::Password do
     should_permit_param(
       "foo",
       on_model: Customer,
-      for_attribute: :foo,
+      for_attribute: :foo
     )
   end
 
@@ -54,8 +54,8 @@ describe Administrate::Field::Password do
 
       it "shortens to the given length & different to default character" do
         password = password_with_options(lorem(30),
-                                         truncate: 10,
-                                         character: "-")
+          truncate: 10,
+          character: "-")
 
         expect(password.truncate).to eq(lorem(10, "-"))
       end

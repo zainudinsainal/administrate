@@ -17,6 +17,287 @@
 
 ## Changes
 
+### 1.0.0 (October 31, 2025)
+
+After a long time in the making, and contributions from many different people, 
+we're pleased to release Administrate v1.0.0! Thank you to everyone who uses, 
+contributes and opens issues on Administrate. It couldn't be done without you.
+
+Aside from lots of smaller optimisations, this release starts bundling assets 
+inside the gem which brings both easier setup and support for all of the new 
+ways to handle assets in Rails.
+
+Administrate has been stable for a long time and this release will be the last 
+with the widest Ruby and Rails support. We're going to drop some older versions 
+of Ruby and Rails which are beyond EOL after this release, but it's not 
+something we wanted to do ahead of release v1.
+
+The following templates have changed since v1.0.0.beta3:
+
+  app/views/administrate/application/_collection.html.erb
+  app/views/administrate/application/_collection_header_actions.html.erb
+  app/views/administrate/application/_collection_item_actions.html.erb
+  app/views/administrate/application/_form.html.erb
+  app/views/administrate/application/_icons.html.erb
+  app/views/administrate/application/_index_header.html.erb
+  app/views/administrate/application/index.html.erb
+  app/views/fields/has_many/_form.html.erb
+  app/views/fields/has_one/_form.html.erb
+  app/views/fields/polymorphic/_form.html.erb
+
+If your application overrides any of them, make sure to review your
+custom templates to ensure that they remain compatible.
+
+* [COMPAT] [#2900] Upgrade default Ruby from 3.4.1 to 3.4.6
+* [OPTIM] [#2874] Remove unused association_attribute from Order
+* [DOC] [#2518] Add a guide for Migrating to v1
+* [BUGFIX] [#2865] Fix problems with having a model named Host
+* [OPTIM] [#2844] Removed the link role from the index table
+* [OPTIM] [#2832] Remove deprecations ahead of releasing 1.0
+* [OPTIM] [#2837] Replace data.count with data.size in HasMany field
+* [CHANGE] [#2842] Conventional location and name for custom field
+* [BUGFIX] [#2839] Fix broken Selectize on polymorphic select field
+* [BUGFIX] [#2836] Update link to selectize.js
+* [CHANGE] [#2827] Undeprecations of `:class_name` I missed last time
+* [BUGFIX] [#2826] Fix table header generation for "Become" button
+* [OPTIM] [#2825] Replace form_for with form_with
+* [UI] [#2818] Add cell styles for action buttons
+* [UI] [#2758] Add tooltip to search
+* [UI] [#2804] Display field hints on nested forms
+* [UI] [#2810] Restrict attributes shown on the Customer index
+* [UI] [#2809] Switch to using the feather icon set
+* [BUGFIX] [#2811] Fix Stimulus Selectize reinitialization issue
+* [I18n] [#2797] Add translation support for polymorphic fields
+* [BUGFIX] [#2787] Stop the "Become" button showing on nested items
+* [FEATURE] [#2467] Introduce partial search similar to Rails
+* [BUGFIX] [#2784] Required for `nil.try` to be available
+* [I18n] [#2780] Ensure we localise time formatting
+* [I18n] [#2779] Fix datetime formatting and timezone handling
+* [I18n] [#2778] Fix date localization to respect timezone settings
+* [DOC] [#2777] Add a guide for using Rails view variants
+* [UI] [#2742] Ensure danger buttons have red hover state
+* [UI] [#2737] Convert internal stylesheets to use css vars
+* [FEATURE] [#2659] Allow configuring the sortable column on Field
+* [BUGFIX] [#2753] Fix deprecation warning regarding to_time
+* [BUGFIX] [#2765] Fix missing logger require for Rails 6.x
+* [BUGFIX] [#2761] Manually resolve broken net-smtp dependency
+* [OPTIM] [#2440] Reduce iterations and allocations for Namespace#routes
+* [DOC] [#2756] Rephrase the Administrate pitch
+* [DOC] [#2505] Stop saying Administrate doesn't have a DSL
+* [BUGFIX] [#2754] Re-introduce bundle install to bin/setup
+* [DOC] [#2506] Remove pre-1.0 statement
+* [SECURITY] [#2751] Upgrade Rails to 8.0.0.1
+* [BUGFIX] [#2748] Tidy up and add yarn to bin/setup
+* [OPTIM] [#2746] Remove package-lock.json in favour of yarn.lock
+* [BUGFIX] [#2749] Fix Procfile.dev
+* [OPTIM] [#2744] Switch to Puma for Rack compatibility
+* [DOC] [#2530] Update linting references
+* [COMPAT] [#2740] Pin psych below 4 for Rails 6.0 support
+* [COMPAT] [#2739] Add drb, mutex_m to the Rails 6.0 Appraisal
+* [COMPAT] [#2734] Upgrade base Ruby to 3.4.1 and add to test matrix
+* [OPTIM] [#2733] Remove pry
+
+Since the last main release (v0.20.1), we've:
+
+* [BUGFIX] [#2728] Fix BUNDLE_GEMFILE path for demo deployments
+* [COMPAT] [#2705] Add support for Rails 8.0
+* [DOC] [#2712] Separate Appraisal runs from primary test runs
+* [DOC] [#2680] Run diff-check on JS/CSS to catch updates
+* [BUGFIX] [#2710] Re-bundle JS in a fresh environment
+* [CHANGE] [#2452] Updated Views::IndexGenerator to copy all partials
+* [CHANGE] [#2684] Singularize object creation form resource name.
+* [DOC] [#2524] Start running Appraisals in the build matrix
+* [COMPAT] [#2697] Undeprecate :class_name
+* [DOC] [#2700] Add feature-test coverage for Rich Text Field
+* [DOC] [#2693] Generate `fields/rich_text/form` with documentation
+* [COMPAT] [#2696] Reliable way to check a path with Capybara
+* [DOC] [#2475] Document using custom assets
+* [COMPAT] [#2691] Add .tool-versions for asdf
+* [FEATURE] [#2658] Support for virtual fields
+* [FEATURE] [#2665] Allow configuring textarea input options
+* [FEATURE] [#2652] Allow scope to accept field in Field::BelongsTo
+* [CHANGE] [#2674] Remove legacy asset generators
+* [FEATURE] [#2668] Embed sources in CSS sourcemaps
+* [FEATURE] [#2574] Add several layout hooks to provide extra content
+* [I18n] [#2590] Translate labels for belongs_to/_form if available
+* [DOC] [#2609] Add diff-check to catch missing Appraisal runs
+* [COMPAT] [#2654] Update cssbundling/jsbundling in Appraisals
+* [SECURITY] [#2630] Add security.yml and SECURITY.md
+* [SECURITY] [#2637] Update rexml to fix a security vulnerability
+* [DOC] [#2568] update document on example website to HasOne field type for 
+  HasOne section
+* [BUGFIX] [#2584] Fix ordering HasOne fields without explicit order
+* [BUGFIX] [#2558] Fix broken has_one style
+* [BUGFIX] [#2495] Fix generator path for namespaced models
+* [COMPAT] [#2607] Update Rails from 7.0.8.1 to 7.0.8.1
+* [FEATURE] [#2411] Add Field::RichText
+* [FEATURE] [#2582] Copy the index_header partial when generating views
+* [BUGFIX] [#2581] Fix "search with a filter with arguments" spec
+* [DOC] [#2550] Call dynamic-readme reusable workflow
+* [DOC] [#2556] Update contributing guide with command to start server
+* [COMPAT] [#2536] Update Rails to 7.0.8.1
+* [SECURITY] [#2516] Unsafe Actions: Replace `link_to` calls with `button_to`
+* [CHANGE] [#2448] Replace `jquery-ujs` with `@hotwired/turbo`
+* [CHANGE] [#2447] Implement client-side with Stimulus
+* [FIX] [#2502] Fix bug where layout generator ignored namespace
+* [FIX] [#2512] Fix Field::Boolean hidden checkbox regression
+* [OPTIM] [#2508] Lint Ruby with standardrb
+* [COMPAT] [#2507] Add .node-version to test against Node v20.11.0
+* [CHANGE] [#2397] Start bundling compiled assets in the Gem
+* [UI] [#2492] Switch to using @thoughtbot/stylelint-config
+* [BUGFIX] [#2498] Enable running workflows from forks
+
+
+### 1.0.0.beta3 (December 24, 2024)
+
+The following templates have changed since v1.0.0.beta2:
+
+  app/views/administrate/application/new.html.erb
+  app/views/fields/rich_text/_form.html.erb
+
+If your application overrides any of them, make sure to review your
+custom templates to ensure that they remain compatible.
+
+* [BUGFIX] [#2728] Fix BUNDLE_GEMFILE path for demo deployments
+* [COMPAT] [#2705] Add support for Rails 8.0
+* [DOC] [#2712] Separate Appraisal runs from primary test runs
+* [DOC] [#2680] Run diff-check on JS/CSS to catch updates
+* [BUGFIX] [#2710] Re-bundle JS in a fresh environment
+* [CHANGE] [#2452] Updated Views::IndexGenerator to copy all partials
+* [CHANGE] [#2684] Singularize object creation form resource name.
+* [DOC] [#2524] Start running Appraisals in the build matrix
+* [COMPAT] [#2697] Undeprecate :class_name
+* [DOC] [#2700] Add feature-test coverage for Rich Text Field
+* [DOC] [#2693] Generate `fields/rich_text/form` with documentation
+* [COMPAT] [#2696] Reliable way to check a path with Capybara
+* [DOC] [#2475] Document using custom assets
+* [COMPAT] [#2691] Add .tool-versions for asdf
+
+### 1.0.0.beta2 (October 25, 2024)
+
+The following templates have changed since v1.0.0.beta1:
+
+  app/views/administrate/application/_collection.html.erb
+  app/views/administrate/application/_collection_item_actions.html.erb
+  app/views/administrate/application/_index_header.html.erb
+  app/views/administrate/application/_javascript.html.erb
+  app/views/administrate/application/edit.html.erb
+  app/views/administrate/application/index.html.erb
+  app/views/administrate/application/new.html.erb
+  app/views/administrate/application/show.html.erb
+  app/views/fields/belongs_to/_form.html.erb
+  app/views/fields/has_many/_form.html.erb
+  app/views/fields/polymorphic/_form.html.erb
+  app/views/fields/rich_text/_form.html.erb
+  app/views/fields/rich_text/_index.html.erb
+  app/views/fields/rich_text/_show.html.erb
+  app/views/fields/select/_form.html.erb
+  app/views/fields/text/_form.html.erb
+  app/views/layouts/administrate/application.html.erb
+
+If your application overrides any of them, make sure to review your
+custom templates to ensure that they remain compatible.
+
+* [FEATURE] [#2658] Support for virtual fields
+* [FEATURE] [#2665] Allow configuring textarea input options
+* [FEATURE] [#2652] Allow scope to accept field in Field::BelongsTo
+* [CHANGE] [#2674] Remove legacy asset generators
+* [FEATURE] [#2668] Embed sources in CSS sourcemaps
+* [FEATURE] [#2574] Add several layout hooks to provide extra content
+* [I18n] [#2590] Translate labels for belongs_to/_form if available
+* [DOC] [#2609] Add diff-check to catch missing Appraisal runs
+* [COMPAT] [#2654] Update cssbundling/jsbundling in Appraisals
+* [SECURITY] [#2630] Add security.yml and SECURITY.md
+* [SECURITY] [#2637] Update rexml to fix a security vulnerability
+* [DOC] [#2568] update document on example website to HasOne field type for 
+  HasOne section
+* [BUGFIX] [#2584] Fix ordering HasOne fields without explicit order
+* [BUGFIX] [#2558] Fix broken has_one style
+* [BUGFIX] [#2495] Fix generator path for namespaced models
+* [COMPAT] [#2607] Update Rails from 7.0.8.1 to 7.0.8.1
+* [FEATURE] [#2411] Add Field::RichText
+* [FEATURE] [#2582] Copy the index_header partial when generating views
+* [BUGFIX] [#2581] Fix "search with a filter with arguments" spec
+* [DOC] [#2550] Call dynamic-readme reusable workflow
+* [DOC] [#2556] Update contributing guide with command to start server
+* [COMPAT] [#2536] Update Rails to 7.0.8.1
+* [SECURITY] [#2516] Unsafe Actions: Replace `link_to` calls with `button_to`
+* [CHANGE] [#2448] Replace `jquery-ujs` with `@hotwired/turbo`
+* [CHANGE] [#2447] Implement client-side with Stimulus
+* [FIX] [#2502] Fix bug where layout generator ignored namespace
+* [FIX] [#2512] Fix Field::Boolean hidden checkbox regression
+
+### 1.0.0.beta1 (February 5, 2024)
+
+In this release, the assets Administrate requires are now bundled in with the
+gem itself. You might need to do something to try this release out and we'd
+like to hear from you about how this goes! Please open an issue if you have any
+troubles.
+
+We have [an open PR to document how to work with custom assets][pr2467], if
+that's something you're doing.
+
+The plan is to release a couple of "beta" releases, followed by a release
+candidate after we've ironed out the migration requirements.
+
+* [OPTIM] [#2508] Lint Ruby with standardrb
+* [COMPAT] [#2507] Add .node-version to test against Node v20.11.0
+* [CHANGE] [#2397] Start bundling compiled assets in the Gem
+* [UI] [#2492] Switch to using @thoughtbot/stylelint-config
+* [BUGFIX] [#2498] Enable running workflows from forks
+
+[pr2467]: https://github.com/thoughtbot/administrate/pull/2475
+
+### 0.20.1 (January 24, 2024)
+
+In `0.20.0`, we introduced a regression which potentially meant you might
+get a `NameError` because of a missing import on `Administrate::VERSION`,
+this fixes that and two other minor issues as well.
+
+* [BUGFIX] [#2494] Fix build-changelog with no template changes
+* [BUGFIX] [#2491] Fix missing `Administrate::VERSION` reference
+* [DOC] [#2489] Fix path in documentation
+
+### 0.20.0 (January 17, 2024)
+
+This is our final release before v1.0.0, which will bring with it a big
+change around how we handle our CSS and JS assets. You'll most likely need
+to do some work to update, and we'll be publishing release candidate releases
+to help learn along the way. If you can, we'd love it if you could give them a
+try and report any problems you face!
+
+The following templates have changed since v0.19.0:
+
+  app/views/administrate/application/_form.html.erb
+  app/views/administrate/application/show.html.erb
+  app/views/fields/has_one/_form.html.erb
+  app/views/fields/has_one/_show.html.erb
+
+If your application overrides any of them, make sure to review your
+custom templates to ensure that they remain compatible.
+
+* [FEATURE] [#2484] Yield created resource if block is given
+* [OPTIM] [#2473] Remove CircleCI
+* [COMPAT] [#2485] Switch to the Sentry Ruby & Rails gems
+* [UI] [#2422] Allow grouping fields (new, edit and show)
+* [COMPAT] [#2479] Use a dedicated ActiveSupport::Deprecation instance
+* [COMPAT] [#2483] Start testing against Ruby 3.3
+* [BUGFIX] [#2480] Fix the bundle audit workflow
+* [COMPAT] [#1932] Start testing on GitHub Actions
+* [OPTIM] [#2418] Build SQL with Arel instead of from strings
+* [UI] [#2405] Add form field hints
+* [COMPAT] [#2462] Avoid open-ended dependencies
+* [COMPAT] [#2419] Update `selenium-webdriver` and remove `webdrivers`
+* [COMPAT] [#2469] Drop support for Ruby 2.7, since it's EOL
+* [BUGFIX] [#2427] Support all number helpers of ActiveSupport::NumberHelper
+* [DOC] [#2443] Add sample app path to CONTRIBUTING.md
+* [FEATURE] [#2415] hasMany collection columns
+* [BUGFIX] [#2403] Add Administrate::Punditize methods as module methods
+* [COMPAT] [#2433] Add GitHub Actions as an ecosystem for Dependabot
+* [COMPAT] [#2428] Enable Rails 7 on CI
+* [COMPAT] [#2410] Another year, another change to how to deal with webdrivers
+* [DOC] [#2408] Example app: change float column types to decimal
+
 ### 0.19.0 (July 18, 2023)
 
 Once again, a big catchup release with lots of miscellaneous compatibility

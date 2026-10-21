@@ -1,0 +1,31 @@
+---
+name: diff-check
+on: [push]
+
+jobs:
+  appraisal:
+    runs-on: ubuntu-latest
+    env:
+      DIFF_CHECK_APPRAISAL: "true"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+      - run: bundle install
+      - uses: nickcharlton/diff-check@main
+        with:
+          command: bundle exec appraisal
+
+  builds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up JS
+        uses: actions/setup-node@v6
+        with:
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - uses: nickcharlton/diff-check@main
+        with:
+          command: |
+            yarn build
+            yarn build:css

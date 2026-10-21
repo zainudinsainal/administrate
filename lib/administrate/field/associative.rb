@@ -37,13 +37,17 @@ module Administrate
 
       def associated_class_name
         if option_given?(:class_name)
-          deprecated_option(:class_name)
+          options.fetch(:class_name)
         else
           self.class.associated_class_name(
             resource.class,
-            attribute,
+            attribute
           )
         end
+      end
+
+      def html_controller
+        "select"
       end
 
       private
@@ -52,35 +56,16 @@ module Administrate
         "#{associated_class_name}Dashboard".constantize.new
       end
 
-      def primary_key
-        # Deprecated, renamed `association_primary_key`
-        Administrate.warn_of_deprecated_method(self.class, :primary_key)
-        association_primary_key
-      end
-
       def association_primary_key
-        if option_given?(:primary_key)
-          deprecated_option(:primary_key)
-        else
-          self.class.association_primary_key_for(resource.class, attribute)
-        end
+        self.class.association_primary_key_for(resource.class, attribute)
       end
 
       def foreign_key
-        if option_given?(:foreign_key)
-          deprecated_option(:foreign_key)
-        else
-          self.class.foreign_key_for(resource.class, attribute)
-        end
+        self.class.foreign_key_for(resource.class, attribute)
       end
 
       def option_given?(name)
         options.key?(name)
-      end
-
-      def deprecated_option(name)
-        Administrate.warn_of_deprecated_option(name)
-        options.fetch(name)
       end
     end
   end

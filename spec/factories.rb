@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :customer do
     association :territory, factory: :country
     sequence(:name) { |n| "Customer #{n}" }
-    email { name.downcase.gsub(" ", "_") + "@example.com" }
+    email { name.downcase.tr(" ", "_") + "@example.com" }
 
     transient do
       order_count { 3 }
@@ -72,6 +72,10 @@ FactoryBot.define do
   factory :country do
     sequence(:name) { |n| "Country #{n}" }
     sequence(:code) { |n| "C#{n}" }
+  end
+
+  factory :host do
+    name { Faker::Internet.ip_v4_address }
   end
 
   factory :page
