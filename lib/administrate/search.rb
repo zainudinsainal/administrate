@@ -129,23 +129,34 @@ module Administrate
     end
 
     def query_table_name(attr)
-      if association_search?(attr)
-        provided_class_name = attribute_types[attr].options[:class_name]
-        unquoted_table_name =
+      unquoted_table_name =
+        if association_search?(attr)
+          provided_class_name = attribute_types[attr].options[:class_name]
           if provided_class_name
             provided_class_name.constantize.table_name
           else
             @scoped_resource.reflect_on_association(attr).klass.table_name
           end
-        ActiveRecord::Base.connection.quote_table_name(unquoted_table_name)
-      else
-        ActiveRecord::Base.connection
-          .quote_table_name(@scoped_resource.table_name)
-      end
+        else
+          @scoped_resource.table_name
+        end
+      quote(:quote_table_name, unquoted_table_name)
     end
 
     def column_to_query(attr)
-      ActiveRecord::Base.connection.quote_column_name(attr)
+      quote(:quote_column_name, attr)
+    end
+
+    # Rails 7.2 added `with_connection`, and Rails 8.1 deprecates `connection`
+    # in its favour. Older Rails has only `connection`.
+    def quote(method, name)
+      if ActiveRecord::Base.respond_to?(:with_connection)
+        ActiveRecord::Base.with_connection do |connection|
+          connection.public_send(method, name)
+        end
+      else
+        ActiveRecord::Base.connection.public_send(method, name)
+      end
     end
 
     def tables_to_join
